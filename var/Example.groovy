@@ -224,6 +224,3 @@ println(json_str)
 def json_beauty = JsonOutput.prettyPrint(json_str)
 println(json_beauty)
 
-File file = new File("./Normal.json")
-file.write(json_beauty)
-
