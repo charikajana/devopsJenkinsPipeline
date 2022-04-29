@@ -1,4 +1,95 @@
 import groovy.json.JsonOutput
+def filePath="C:\\Chari_GCP\\GCPperformance\\lgs-performance\\Jmeter_scripts\\nghp-shopping\\Release_NGHP_Shopping_Squatter_V4.jmx"
+def Acceptance_data=activeSamplerAcceptanceCriteria(filePath)
+
+def activeSamplerAcceptanceCriteria(Object filePath){
+
+    com.sabre.devops.lodging.Utils utils = new com.sabre.devops.lodging.Utils()
+    Map<String, String> map = utils.getAllActiveSamplersFromAJmxFile(filePath);
+    String SamplerName = map.get("samplerName");
+    String[] Samplers = SamplerName.split(",")
+    for (int i = 0; i < Samplers.length; i++) {
+        def respTime=Samplers[i]+"_respTime"
+        def tps=Samplers[i]+"_tps"
+        def ErrorRate=Samplers[i]+"_ErrorRate"
+        Acceptance_data=[
+                samplerNameOne:[
+                        "type": "avg",
+                        "unit": "ms",
+                        "green":[[
+                                1,
+                                10
+                        ]],
+                        "yellow": [[
+                                10,
+                                20
+                        ]],
+                        "red": [[
+                                20,
+                                null
+                        ]],
+                        "macro":[
+                                "name": "jmeter_avg_response_time",
+                                "parameters":[
+                                        "transaction": Samplers[i],
+                                        "ld_label": "jmeter-1"
+                                ]
+                        ]
+
+                ],
+                tps:[
+                        "type": "avg",
+                        "unit": "ms",
+                        "green":[[
+                                         1,
+                                         10
+                                 ]],
+                        "yellow": [[
+                                           10,
+                                           20
+                                   ]],
+                        "red": [[
+                                        20,
+                                        null
+                                ]],
+                        "macro":[
+                                "name": "jmeter_avg_response_time",
+                                "parameters":[
+                                        "transaction": Samplers[i],
+                                        "ld_label": "jmeter-1"
+                                ]
+                        ]
+
+                ],
+                ErrorRate:[
+                        "type": "avg",
+                        "unit": "ms",
+                        "green":[[
+                                         1,
+                                         10
+                                 ]],
+                        "yellow": [[
+                                           10,
+                                           20
+                                   ]],
+                        "red": [[
+                                        20,
+                                        null
+                                ]],
+                        "macro":[
+                                "name": "jmeter_avg_response_time",
+                                "parameters":[
+                                        "transaction": Samplers[i],
+                                        "ld_label": "jmeter-1"
+                                ]
+                        ]
+
+                ]
+        ]
+    }
+    return Acceptance_data
+}
+
 def data = [
         "project"            : [
                 "name"                   : "nghp-shopping",
